@@ -15,6 +15,24 @@ with open(os.path.join(__location__, 'Countries.csv')) as f:
     for r in rows:
         countries.append(dict(r))
 
+player = []
+with open(os.path.join(__location__, 'Players.csv')) as f:
+    rows = csv.DictReader(f)
+    for r in rows:
+        player.append(dict(r))
+
+Teams = []
+with open(os.path.join(__location__, 'Teams.csv')) as f:
+    rows = csv.DictReader(f)
+    for r in rows:
+        Teams.append(dict(r))
+
+titanic = []
+with open(os.path.join(__location__, 'Titanic.csv')) as f:
+    rows = csv.DictReader(f)
+    for r in rows:
+        titanic.append(dict(r))
+
 
 class DB:
     def __init__(self):
@@ -78,6 +96,9 @@ class Table:
 
 table1 = Table('cities', cities)
 table2 = Table('countries', countries)
+table4 = Table('players', player)
+table5 = Table('Teams', Teams)
+table6 = Table('Titanic', titanic)
 my_DB = DB()
 my_DB.insert(table1)
 my_DB.insert(table2)
@@ -127,3 +148,18 @@ for item in my_table2.table:
         print(item['country'], my_table1_filtered.aggregate(lambda x: min(x), 'latitude'),
               my_table1_filtered.aggregate(lambda x: max(x), 'latitude'))
 print()
+
+table4_filtered = table4.filter(lambda x: 'ia' in x['team']).filter(lambda x: int(x['minutes']) < 200).filter(lambda x: int(x['passes']) > 100)
+print(
+    f'player on a team with “ia” in the team name played less than 200 minutes and made more than 100 passes '
+    f'is {table4_filtered}'
+)
+table5_filtered_high = table5.filter(lambda x: int(x['ranking']) <= 10).aggregate(lambda x: sum(x)/len(x), 'games')
+table5_filtered_low = table5.filter(lambda x: int(x['ranking']) > 10).aggregate(lambda x: sum(x)/len(x), 'games')
+print(
+    f'average number of games played for teams ranking below 10 is {table5_filtered_low:.3f} '
+    f'versus teams ranking above or equal 10 is {table5_filtered_high:.3f}'
+)
+table4_filtered_forward = table4.filter(lambda x: 'forward' in x['position']).aggregate(lambda x: sum(x)/len(x), 'passes')
+table4_filtered_midfielder = table4.filter(lambda x: 'midfielder' in x['position']).aggregate(lambda x: sum(x)/len(x), 'passes')
+print(f'average passes for forward is {table4_filtered_forward:.3f}average passes for midfielder is {table4_filtered_midfielder:.3f}')
