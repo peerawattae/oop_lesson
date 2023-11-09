@@ -99,6 +99,8 @@ table2 = Table('countries', countries)
 table4 = Table('players', player)
 table5 = Table('Teams', Teams)
 table6 = Table('Titanic', titanic)
+titanic_db = DB()
+titanic_db.insert(table6)
 my_DB = DB()
 my_DB.insert(table1)
 my_DB.insert(table2)
@@ -163,3 +165,17 @@ print(
 table4_filtered_forward = table4.filter(lambda x: 'forward' in x['position']).aggregate(lambda x: sum(x)/len(x), 'passes')
 table4_filtered_midfielder = table4.filter(lambda x: 'midfielder' in x['position']).aggregate(lambda x: sum(x)/len(x), 'passes')
 print(f'average passes for forward is {table4_filtered_forward:.3f}average passes for midfielder is {table4_filtered_midfielder:.3f}')
+table6_filtered_first = table6.filter(lambda x: '1' in x['class']).aggregate(lambda x: sum(x)/len(x), 'fare')
+table6_filtered_third = table6.filter(lambda x: '3' in x['class']).aggregate(lambda x: sum(x)/len(x), 'fare')
+print(
+    f'prices in first class ticket is {table6_filtered_first:.3f}'
+    f'prices in third class ticket is {table6_filtered_third:.3f}'
+)
+table6_filtered_male = table6.filter(lambda x: 'M' in x['gender']).aggregate(lambda x: len(x), 'fare')
+table6_filtered_male_survived = table6.filter(lambda x: 'M' in x['gender']).filter(lambda x: 'yes' in x['survived']).aggregate(lambda x: len(x), 'fare')
+table6_filtered_female = table6.filter(lambda x: 'F' in x['gender']).aggregate(lambda x: len(x), 'fare')
+table6_filtered_female_survived = table6.filter(lambda x: 'F' in x['gender']).filter(lambda x: 'yes' in x['survived']).aggregate(lambda x: len(x), 'fare')
+print(
+    f'survival rate of male is {(table6_filtered_male_survived/table6_filtered_male)*100:.3f} and '
+    f'survival rate of female is {(table6_filtered_female_survived/table6_filtered_female)*100:.3f}'
+)
