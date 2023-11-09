@@ -179,3 +179,7 @@ print(
     f'survival rate of male is {(table6_filtered_male_survived/table6_filtered_male)*100:.3f} and '
     f'survival rate of female is {(table6_filtered_female_survived/table6_filtered_female)*100:.3f}'
 )
+table6_filtered_southampton = table6.filter(lambda x: 'Southampton' in x['embarked']).aggregate(lambda x: len(x), 'fare')
+print(
+    f'number of people that embarked from Southampton is {table6_filtered_southampton}'
+)
