@@ -74,11 +74,6 @@ class Table:
                 filtered_table.table.append(item1)
         return filtered_table
 
-    def aggregate(self, function, aggregation_key):
-        temps = []
-        for item1 in self.table:
-            temps.append(float(item1[aggregation_key]))
-        return function(temps)
 
     def __is_float(self, element):
         if element is None:
